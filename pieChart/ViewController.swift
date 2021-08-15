@@ -13,21 +13,20 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         addPieChart()
-        addRing()
+        addRainbowRing()
         
     }
     
+   
     
-    func addRing() {
-        
-      
+    func addRainbowRing() {
         
         let aDegree = CGFloat.pi/180
-        let lineWidth: CGFloat = 20
-        let radius: CGFloat = 80
+        let lineWidth: CGFloat = 15
+        let radius: CGFloat = 60
         let startAngle: CGFloat = 120
         let endAngle: CGFloat = 60
-        let centerPoint: CGPoint = CGPoint(x: lineWidth + radius - 10, y: lineWidth + radius - 10)
+        let centerPoint: CGPoint = CGPoint(x: radius + 2 * lineWidth, y: radius + 3 * lineWidth)
       
         let ringPath = UIBezierPath(arcCenter: centerPoint, radius: radius, startAngle: aDegree * startAngle, endAngle: aDegree * endAngle, clockwise: true)
         
@@ -37,24 +36,38 @@ class ViewController: UIViewController {
         ringLayer.lineCap = .round
         ringLayer.path = ringPath.cgPath
         ringLayer.strokeColor = UIColor.black.cgColor
-        view.layer.addSublayer(ringLayer)
    
-        
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 50, y: 400, width: radius * 3,height: radius * 3)
-        gradientLayer.colors = [UIColor.blue.cgColor,
-                                UIColor.cyan.cgColor,
-                                UIColor.yellow.cgColor,
-                                UIColor.orange.cgColor,
-                                UIColor.red.cgColor]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: radius*1.5,height: radius*3 )
+        gradientLayer.colors = [
+            CGColor(red: 48/255, green: 134/255, blue: 217/255, alpha: 1),
+            CGColor(red: 48/255, green: 134/255, blue: 217/255, alpha: 1),
+            CGColor(red: 108/255, green: 133/255, blue: 150/255, alpha: 1)]
+        gradientLayer.startPoint = CGPoint(x: 0 ,y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
         
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
-      
+        let gradientLayer1 = CAGradientLayer()
+        gradientLayer1.frame = CGRect(x: radius*1.5, y: 0, width: radius*1.5,height: radius*3 )
+        gradientLayer1.colors = [
+            CGColor(red: 48/255, green: 134/255, blue: 217/255, alpha: 1),
+            CGColor(red: 48/255, green: 134/255, blue: 217/255, alpha: 1),
+            CGColor(red: 48/255, green: 134/255, blue: 217/255, alpha: 1),
+            CGColor(red: 120/255, green: 200/255, blue: 105/255, alpha: 1),
+            CGColor(red: 250/255, green: 149/255, blue: 56/255, alpha: 1),
+            CGColor(red: 236/255, green: 60/255, blue: 60/255, alpha: 1),
+            CGColor(red: 236/255, green: 60/255, blue: 60/255, alpha: 1)]
+        gradientLayer.startPoint = CGPoint(x: 0 ,y: 0)
+        gradientLayer.endPoint = CGPoint(x: 0, y: 1)
         
-        view.layer.addSublayer(gradientLayer)
-
-        gradientLayer.mask = ringLayer
+        let mainLayer = CALayer()
+        mainLayer.frame = CGRect(x: 30, y: 400, width: radius*3, height: radius*3)
+       
+        mainLayer.addSublayer(gradientLayer)
+        mainLayer.addSublayer(gradientLayer1)
+        mainLayer.addSublayer(ringLayer)
+        mainLayer.mask = ringLayer
+    
+        view.layer.addSublayer(mainLayer)
     }
     
     
@@ -78,7 +91,7 @@ class ViewController: UIViewController {
             view.layer.addSublayer(percentageLayer)
             
             let textCenterDegree = startAngle + (360 * percentage/100) * 1/2
-            let textPath = UIBezierPath(arcCenter: center, radius: radius, startAngle: aDegree * textCenterDegree, endAngle: aDegree * textCenterDegree, clockwise: true)
+            let textPath = UIBezierPath(arcCenter: center, radius: radius * 0.6, startAngle: aDegree * textCenterDegree, endAngle: aDegree * textCenterDegree, clockwise: true)
             
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 30))
             label.text = "\(percentage)%"
